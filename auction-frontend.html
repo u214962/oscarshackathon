@@ -7,7 +7,6 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Courier+Prime:wght@400;700&family=Barlow:wght@300;400;600&display=swap');
 
-/* ── TOKENS ──────────────────────────────────────────────────────── */
 :root {
   --ink:      #0e0e0e;
   --paper:    #f0ebe2;
@@ -21,7 +20,6 @@
   --body:     'Barlow', sans-serif;
 }
 
-/* ── BASE ────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -32,7 +30,6 @@ body {
   min-height: 100vh;
 }
 
-/* ── NOISE TEXTURE OVERLAY ───────────────────────────────────────── */
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -40,10 +37,8 @@ body::after {
   pointer-events: none; z-index: 9999; opacity: 0.5;
 }
 
-/* ── LAYOUT ──────────────────────────────────────────────────────── */
 .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px 80px; }
 
-/* ── HEADER ──────────────────────────────────────────────────────── */
 header {
   border-bottom: 4px solid var(--ink);
   display: grid;
@@ -53,236 +48,109 @@ header {
   margin-bottom: 32px;
   gap: 16px;
 }
-.logo {
-  font-family: var(--head);
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  line-height: 1;
-  letter-spacing: -.02em;
-}
+.logo { font-family: var(--head); font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1; letter-spacing: -.02em; }
 .logo-accent { color: var(--yellow); -webkit-text-stroke: 1.5px var(--ink); }
-.subtitle {
-  font-family: var(--mono);
-  font-size: .72rem;
-  color: var(--gray);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
+.subtitle { font-family: var(--mono); font-size: .72rem; color: var(--gray); letter-spacing: .08em; text-transform: uppercase; margin-top: 4px; }
 .wallet-zone { text-align: right; }
-#connectBtn {
-  font-family: var(--head);
-  font-size: .85rem;
-  letter-spacing: .04em;
-  padding: 10px 20px;
-  background: var(--ink);
-  color: var(--paper);
-  border: none; cursor: pointer;
-  transition: background .15s;
-}
+#connectBtn { font-family: var(--head); font-size: .85rem; letter-spacing: .04em; padding: 10px 20px; background: var(--ink); color: var(--paper); border: none; cursor: pointer; transition: background .15s; }
 #connectBtn:hover { background: #333; }
-#walletAddr {
-  font-family: var(--mono);
-  font-size: .68rem;
-  color: var(--gray);
-  margin-top: 6px;
-}
+#walletAddr { font-family: var(--mono); font-size: .68rem; color: var(--gray); margin-top: 6px; }
 
-/* ── PHASE STRIP ─────────────────────────────────────────────────── */
-.phase-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 2px solid var(--ink);
-  margin-bottom: 28px;
-  overflow: hidden;
-}
-.ps {
-  padding: 10px 14px;
-  font-family: var(--mono);
-  font-size: .7rem;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  border-right: 2px solid var(--ink);
-  color: var(--gray);
-  transition: background .2s, color .2s;
-}
+/* ── PHASE TIMELINE ──────────────────────────────────────────────── */
+.phase-timeline { border: 2px solid var(--ink); margin-bottom: 28px; overflow: hidden; }
+.phase-timeline-header { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 2px solid var(--ink); }
+.ps { padding: 10px 14px; font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; border-right: 2px solid var(--ink); color: var(--gray); transition: background .2s, color .2s; }
 .ps:last-child { border-right: none; }
 .ps.active { background: var(--ink); color: var(--yellow); }
 .ps.done   { background: var(--lightgray); color: var(--ink); }
+.phase-progress-row { display: grid; grid-template-columns: repeat(4, 1fr); height: 5px; }
+.phase-progress-seg { height: 100%; background: var(--lightgray); border-right: 1px solid var(--ink); transition: background .3s; }
+.phase-progress-seg:last-child { border-right: none; }
+.phase-progress-seg.done   { background: var(--ink); }
+.phase-progress-seg.active { background: var(--yellow); }
+.phase-countdown-row { display: grid; grid-template-columns: repeat(4, 1fr); }
+.phase-cd { padding: 8px 14px 10px; font-family: var(--mono); font-size: .65rem; color: var(--gray); border-right: 2px solid var(--ink); min-height: 42px; letter-spacing: .04em; text-transform: uppercase; }
+.phase-cd:last-child { border-right: none; }
+.phase-cd .cd-time { font-size: .88rem; font-weight: 700; display: block; margin-top: 3px; letter-spacing: .02em; }
+.phase-cd.active { color: var(--ink); }
+.phase-cd.active .cd-time { color: var(--ink); }
+.phase-cd.done .cd-time { color: var(--green); }
+.phase-cd.future { opacity: .45; }
+.cd-bar-wrap { height: 3px; background: var(--lightgray); margin-top: 6px; overflow: hidden; }
+.cd-bar { height: 100%; background: var(--yellow); width: 0%; transition: width .9s linear; }
 
-/* ── NAV TABS ────────────────────────────────────────────────────── */
-.tabs {
-  display: flex; gap: 0;
-  border-bottom: 2px solid var(--ink);
-  margin-bottom: 28px;
-  overflow-x: auto;
-}
-.tab {
-  font-family: var(--head);
-  font-size: .78rem;
-  letter-spacing: .04em;
-  padding: 10px 18px;
-  background: none;
-  border: none; border-bottom: 3px solid transparent;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: var(--gray);
-  white-space: nowrap;
-  transition: color .15s, border-color .15s;
-}
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--ink); margin-bottom: 28px; overflow-x: auto; }
+.tab { font-family: var(--head); font-size: .78rem; letter-spacing: .04em; padding: 10px 18px; background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; cursor: pointer; color: var(--gray); white-space: nowrap; transition: color .15s, border-color .15s; }
 .tab.active { color: var(--ink); border-color: var(--ink); }
 .tab:hover:not(.active) { color: var(--ink); }
 
 .pane { display: none; }
 .pane.active { display: block; }
 
-/* ── CARDS ───────────────────────────────────────────────────────── */
-.card {
-  border: 2px solid var(--ink);
-  padding: 22px;
-  margin-bottom: 20px;
-  position: relative;
-}
-.card-label {
-  font-family: var(--mono);
-  font-size: .65rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  background: var(--paper);
-  padding: 0 6px;
-  position: absolute;
-  top: -10px; left: 14px;
-}
+.card { border: 2px solid var(--ink); padding: 22px; margin-bottom: 20px; position: relative; }
+.card-label { font-family: var(--mono); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; background: var(--paper); padding: 0 6px; position: absolute; top: -10px; left: 14px; }
 
-/* ── FORM ────────────────────────────────────────────────────────── */
 .field { margin-bottom: 14px; }
-label {
-  display: block;
-  font-family: var(--mono);
-  font-size: .68rem;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 5px;
-}
-input, textarea {
-  width: 100%;
-  background: #fff;
-  border: 1.5px solid var(--lightgray);
-  color: var(--ink);
-  font-family: var(--mono);
-  font-size: .82rem;
-  padding: 9px 10px;
-  outline: none;
-  transition: border-color .15s;
-}
+label { display: block; font-family: var(--mono); font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; color: var(--gray); margin-bottom: 5px; }
+input, textarea { width: 100%; background: #fff; border: 1.5px solid var(--lightgray); color: var(--ink); font-family: var(--mono); font-size: .82rem; padding: 9px 10px; outline: none; transition: border-color .15s; }
 input:focus, textarea:focus { border-color: var(--ink); }
 textarea { resize: vertical; min-height: 56px; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 
-/* ── BUTTONS ─────────────────────────────────────────────────────── */
-.btn {
-  font-family: var(--head);
-  font-size: .8rem;
-  letter-spacing: .04em;
-  padding: 10px 22px;
-  border: 2px solid var(--ink);
-  cursor: pointer;
-  transition: background .15s, color .15s, transform .1s;
-}
+.btn { font-family: var(--head); font-size: .8rem; letter-spacing: .04em; padding: 10px 22px; border: 2px solid var(--ink); cursor: pointer; transition: background .15s, color .15s, transform .1s; }
 .btn:active { transform: scale(.97); }
-
-.btn-black { background: var(--ink); color: var(--paper); }
+.btn-black   { background: var(--ink); color: var(--paper); }
 .btn-black:hover { background: #333; }
-
-.btn-yellow { background: var(--yellow); color: var(--ink); }
+.btn-yellow  { background: var(--yellow); color: var(--ink); }
 .btn-yellow:hover { background: #e0b700; }
-
 .btn-outline { background: transparent; color: var(--ink); }
 .btn-outline:hover { background: var(--lightgray); }
-
-.btn-red { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-red     { background: var(--red); color: #fff; border-color: var(--red); }
 .btn-red:hover { background: #b02f25; }
-
-.btn-green { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-green   { background: var(--green); color: #fff; border-color: var(--green); }
 .btn-green:hover { background: #155e39; }
-
 .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 
-/* ── HASH DISPLAY ────────────────────────────────────────────────── */
-.hash-box {
-  font-family: var(--mono);
-  font-size: .75rem;
-  background: var(--ink);
-  color: var(--yellow);
-  padding: 12px 14px;
-  word-break: break-all;
-  line-height: 1.6;
-  margin-top: 10px;
-  display: none;
-}
+.hash-box { font-family: var(--mono); font-size: .75rem; background: var(--ink); color: var(--yellow); padding: 12px 14px; word-break: break-all; line-height: 1.6; margin-top: 10px; display: none; }
 .hash-box.show { display: block; }
-.hash-label {
-  font-size: .62rem;
-  letter-spacing: .08em;
-  color: var(--gray);
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
+.hash-label { font-size: .62rem; letter-spacing: .08em; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; }
 
-/* ── LOG OUTPUT ──────────────────────────────────────────────────── */
-.log {
-  font-family: var(--mono);
-  font-size: .72rem;
-  background: #fff;
-  border: 1.5px solid var(--lightgray);
-  padding: 12px;
-  max-height: 160px;
-  overflow-y: auto;
-  line-height: 1.7;
-  margin-top: 12px;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
+/* Prize reveal box */
+.prize-box { font-family: var(--mono); font-size: .85rem; background: var(--green); color: #fff; padding: 18px 20px; word-break: break-all; line-height: 1.8; margin-top: 12px; display: none; border: 2px solid var(--ink); }
+.prize-box.show { display: block; }
+.prize-box .prize-label { font-size: .62rem; letter-spacing: .1em; color: rgba(255,255,255,.7); margin-bottom: 6px; text-transform: uppercase; }
+.prize-box .prize-value { font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; }
+
+.log { font-family: var(--mono); font-size: .72rem; background: #fff; border: 1.5px solid var(--lightgray); padding: 12px; max-height: 180px; overflow-y: auto; line-height: 1.7; margin-top: 12px; white-space: pre-wrap; word-break: break-all; }
 .log .ok   { color: var(--green); }
 .log .err  { color: var(--red); }
 .log .info { color: #555; }
 .log .hi   { color: var(--ink); font-weight: 700; }
 
-/* ── TABLE ───────────────────────────────────────────────────────── */
 table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: .72rem; }
 th { text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--ink); letter-spacing: .06em; }
 td { padding: 8px 10px; border-bottom: 1px solid var(--lightgray); }
 tr:hover td { background: #f7f2ea; }
 
-.badge {
-  display: inline-block; padding: 2px 8px;
-  font-size: .62rem; font-family: var(--mono);
-  letter-spacing: .05em; text-transform: uppercase;
-  border: 1.5px solid;
-}
-.badge-ok    { border-color: var(--green); color: var(--green); }
-.badge-warn  { border-color: #b07d00; color: #b07d00; }
-.badge-err   { border-color: var(--red); color: var(--red); }
+.badge { display: inline-block; padding: 2px 8px; font-size: .62rem; font-family: var(--mono); letter-spacing: .05em; text-transform: uppercase; border: 1.5px solid; }
+.badge-ok   { border-color: var(--green); color: var(--green); }
+.badge-warn { border-color: #b07d00; color: #b07d00; }
+.badge-err  { border-color: var(--red); color: var(--red); }
 
-/* ── CRYPTO EXPLAINER ────────────────────────────────────────────── */
-.explain {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 18px 20px;
-  margin-bottom: 16px;
-  font-family: var(--mono);
-  font-size: .74rem;
-  line-height: 1.8;
-}
+.explain { background: var(--ink); color: var(--paper); padding: 18px 20px; margin-bottom: 16px; font-family: var(--mono); font-size: .74rem; line-height: 1.8; }
 .explain .hi { color: var(--yellow); }
 .explain code { color: var(--yellow); font-size: .72rem; }
 
-/* ── DIVIDER ─────────────────────────────────────────────────────── */
-hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
+/* Step indicator for prize flow */
+.steps { display: flex; gap: 0; margin-bottom: 20px; }
+.step { flex: 1; padding: 10px 12px; font-family: var(--mono); font-size: .65rem; letter-spacing: .06em; text-transform: uppercase; border: 2px solid var(--lightgray); border-right: none; color: var(--gray); text-align: center; transition: all .2s; }
+.step:last-child { border-right: 2px solid var(--lightgray); }
+.step.done    { background: var(--lightgray); color: var(--ink); border-color: var(--ink); }
+.step.active  { background: var(--yellow); color: var(--ink); border-color: var(--ink); font-weight: 700; }
 
-/* ── SCROLLBAR ───────────────────────────────────────────────────── */
+hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--lightgray); }
 </style>
@@ -294,7 +162,7 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 <header>
   <div>
     <div class="logo">HASH<span class="logo-accent">BID</span></div>
-    <div class="subtitle">// keccak256(amount, password) &middot; commit-reveal auction &middot; sepolia</div>
+    <div class="subtitle">// keccak256(amount, password) &middot; commit-reveal &middot; RSA prize encryption &middot; sepolia</div>
   </div>
   <div class="wallet-zone">
     <button class="btn btn-black" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
@@ -302,22 +170,53 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
   </div>
 </header>
 
-<!-- PHASE STRIP -->
-<div class="phase-strip">
-  <div class="ps active" id="ps-BIDDING">01 &mdash; Bidding</div>
-  <div class="ps"        id="ps-REVEAL" >02 &mdash; Reveal</div>
-  <div class="ps"        id="ps-CLAIM"  >03 &mdash; Claim</div>
-  <div class="ps"        id="ps-ENDED"  >04 &mdash; Ended</div>
+<!-- PHASE TIMELINE -->
+<div class="phase-timeline">
+  <div class="phase-timeline-header">
+    <div class="ps active" id="ps-BIDDING">01 &mdash; Bidding</div>
+    <div class="ps"        id="ps-REVEAL" >02 &mdash; Reveal</div>
+    <div class="ps"        id="ps-CLAIM"  >03 &mdash; Claim</div>
+    <div class="ps"        id="ps-ENDED"  >04 &mdash; Ended</div>
+  </div>
+  <div class="phase-progress-row">
+    <div class="phase-progress-seg active" id="prog-BIDDING"></div>
+    <div class="phase-progress-seg"        id="prog-REVEAL"></div>
+    <div class="phase-progress-seg"        id="prog-CLAIM"></div>
+    <div class="phase-progress-seg"        id="prog-ENDED"></div>
+  </div>
+  <div class="phase-countdown-row">
+    <div class="phase-cd active" id="cd-BIDDING">
+      <span id="cd-label-BIDDING">ends in</span>
+      <span class="cd-time" id="cd-time-BIDDING">--:--:--</span>
+      <div class="cd-bar-wrap"><div class="cd-bar" id="cd-bar-BIDDING"></div></div>
+    </div>
+    <div class="phase-cd future" id="cd-REVEAL">
+      <span id="cd-label-REVEAL">starts in</span>
+      <span class="cd-time" id="cd-time-REVEAL">--:--:--</span>
+      <div class="cd-bar-wrap"><div class="cd-bar" id="cd-bar-REVEAL"></div></div>
+    </div>
+    <div class="phase-cd future" id="cd-CLAIM">
+      <span id="cd-label-CLAIM">starts in</span>
+      <span class="cd-time" id="cd-time-CLAIM">--:--:--</span>
+      <div class="cd-bar-wrap"><div class="cd-bar" id="cd-bar-CLAIM"></div></div>
+    </div>
+    <div class="phase-cd future" id="cd-ENDED">
+      <span id="cd-label-ENDED">starts in</span>
+      <span class="cd-time" id="cd-time-ENDED">--:--:--</span>
+      <div class="cd-bar-wrap"><div class="cd-bar" id="cd-bar-ENDED"></div></div>
+    </div>
+  </div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" onclick="showPane('p-create',this)">Create Auction</button>
-  <button class="tab"        onclick="showPane('p-bid',   this)">Bid</button>
-  <button class="tab"        onclick="showPane('p-reveal',this)">Reveal</button>
-  <button class="tab"        onclick="showPane('p-claim', this)">Claim</button>
-  <button class="tab"        onclick="showPane('p-rsa',   this)">RSA Helper</button>
-  <button class="tab"        onclick="showPane('p-info',  this)">How It Works</button>
+  <button class="tab active" onclick="showPane('p-create', this)">Create Auction</button>
+  <button class="tab"        onclick="showPane('p-bid',    this)">Bid</button>
+  <button class="tab"        onclick="showPane('p-reveal', this)">Reveal</button>
+  <button class="tab"        onclick="showPane('p-claim',  this)">Claim</button>
+  <button class="tab"        onclick="showPane('p-prize',  this)">🔐 Prize</button>
+  <button class="tab"        onclick="showPane('p-rsa',    this)">RSA Helper</button>
+  <button class="tab"        onclick="showPane('p-info',   this)">How It Works</button>
 </div>
 
 <!-- ═══ PANE: CREATE ═══════════════════════════════════════════════ -->
@@ -326,12 +225,12 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
   <div class="card"><span class="card-label">Auction parameters</span>
     <div class="grid2">
       <div class="field">
-        <label>Prize Key</label>
-        <input id="c-prize" type="text" placeholder="GIFT-CARD-50EUR"/>
-      </div>
-      <div class="field">
         <label>Deposit Amount (ETH)</label>
         <input id="c-dep" type="number" step="0.001" placeholder="0.01"/>
+      </div>
+      <div class="field">
+        <label>Minimum Bid (wei)</label>
+        <input id="c-minbid" type="number" placeholder="100000" value="0"/>
       </div>
     </div>
     <div class="grid3">
@@ -350,27 +249,37 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
     </div>
   </div>
 
-  <div class="card"><span class="card-label">Organizer identity (RSA encrypted)</span>
+  <div class="card"><span class="card-label">Prize (RSA encrypted)</span>
     <div class="explain">
-      <span class="hi">Why RSA?</span> Your personal data (DNI, name...) is encrypted
-      off-chain with your RSA public key before touching the blockchain.
-      Only the ciphertext goes on-chain — only you can decrypt it.
-      Use the <span class="hi">RSA Helper</span> tab to encrypt your data.
+      <span class="hi">How prize encryption works:</span><br>
+      1. Generate a key pair below (or in the RSA Helper tab).<br>
+      2. Encrypt your prize text — only the ciphertext goes on-chain.<br>
+      3. After the auction, the winner registers their public key.<br>
+      4. You re-encrypt the prize for the winner; they decrypt it off-chain.<br>
+      The prize is <span class="hi">never in plaintext on-chain</span>.
     </div>
     <div class="field">
-      <label>Encrypted Data (0x hex from RSA Helper)</label>
-      <input id="c-enc" type="text" placeholder="0xabc123..."/>
+      <label>Prize plaintext (will NOT go on-chain)</label>
+      <input id="c-prize-plain" type="text" placeholder="GIFT-CARD-2025-XXXX or any secret"/>
+    </div>
+    <div class="btns" style="margin-bottom:12px">
+      <button class="btn btn-black" onclick="createGenAndEncrypt()">Generate Keys &amp; Encrypt Prize</button>
+    </div>
+    <div class="field">
+      <label>Encrypted Prize (0x hex — auto-filled after encrypt)</label>
+      <textarea id="c-enc" rows="2" placeholder="0xabc123... (auto-filled)"></textarea>
     </div>
     <div class="grid2">
       <div class="field">
-        <label>RSA modulus N (hex)</label>
-        <input id="c-rsaN" type="text" placeholder="hex modulus..."/>
+        <label>Organizer RSA modulus N (hex)</label>
+        <input id="c-rsaN" type="text" placeholder="auto-filled after Generate Keys"/>
       </div>
       <div class="field">
-        <label>RSA exponent E (hex)</label>
+        <label>Organizer RSA exponent E (hex)</label>
         <input id="c-rsaE" type="text" placeholder="010001"/>
       </div>
     </div>
+    <div class="log" id="log-prize-create"></div>
   </div>
 
   <div class="card"><span class="card-label">Deploy / Load</span>
@@ -395,8 +304,10 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
       <span class="hi">Hash scheme:</span>
       <code>bidHash = keccak256(amount &nbsp;||&nbsp; password)</code><br>
       Your bid amount is <span class="hi">invisible on-chain</span> during the bidding phase.
-      Nobody — not even miners — can see it. Save your amount and password:
-      you need them to reveal.
+      Save your amount and password — you need them to reveal.
+    </div>
+    <div id="min-bid-banner" style="display:none;font-family:var(--mono);font-size:.74rem;background:var(--yellow);color:var(--ink);padding:10px 14px;margin-bottom:14px;border:2px solid var(--ink);">
+      ⚠ Minimum bid: <strong id="min-bid-value">—</strong> wei &mdash; bids below this will be rejected on reveal and the deposit forfeited.
     </div>
     <div class="grid2">
       <div class="field">
@@ -408,7 +319,7 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
         <input id="b-pass" type="text" placeholder="my-secret-word"/>
       </div>
     </div>
-    <button class="btn btn-outline" onclick="computeHash()">Compute Hash (off-chain preview)</button>
+    <button class="btn btn-outline" onclick="computeHash()">Compute Hash (preview)</button>
     <div class="hash-box" id="hash-preview">
       <div class="hash-label">keccak256(amount, password) =</div>
       <span id="hash-val"></span>
@@ -434,8 +345,12 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
   <div class="card"><span class="card-label">Reveal your bid</span>
     <div class="explain">
       Submit the <span class="hi">same amount and password</span> used when bidding.
-      The contract recomputes <code>keccak256(amount, password)</code> and checks
-      it matches your stored hash. Wrong values = <span class="hi">deposit forfeited</span>.
+      The contract recomputes <code>keccak256(amount, password)</code> and checks it matches.
+      Wrong values = <span class="hi">deposit forfeited</span>.
+      Bid below minimum = <span class="hi">deposit also forfeited</span>.
+    </div>
+    <div id="min-bid-banner-reveal" style="display:none;font-family:var(--mono);font-size:.74rem;background:var(--yellow);color:var(--ink);padding:10px 14px;margin-bottom:14px;border:2px solid var(--ink);">
+      ⚠ Minimum bid: <strong id="min-bid-value-reveal">—</strong> wei
     </div>
     <div class="grid2">
       <div class="field">
@@ -466,10 +381,8 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 
   <div class="card"><span class="card-label">Claim prize</span>
     <div class="explain">
-      The contract re-verifies your bid:
-      <code>keccak256(amount, password) == stored hash</code>.
-      Only the top unclaimed bidder can claim. If you skip your turn,
-      the next bidder becomes eligible.
+      The contract re-verifies: <code>keccak256(amount, password) == stored hash</code>.
+      Only the top unclaimed bidder can claim.
     </div>
     <div class="grid2">
       <div class="field">
@@ -491,25 +404,122 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 
 </div>
 
+<!-- ═══ PANE: PRIZE (RSA delivery) ═════════════════════════════════ -->
+<div id="p-prize" class="pane">
+
+  <div class="steps">
+    <div class="step" id="step-1">1. Auction ended</div>
+    <div class="step" id="step-2">2. Winner registers key</div>
+    <div class="step" id="step-3">3. Organizer delivers</div>
+    <div class="step" id="step-4">4. Winner decrypts</div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card"><span class="card-label">Prize delivery status</span>
+    <button class="btn btn-outline" onclick="refreshPrizeStatus()">Refresh Status</button>
+    <div class="log" id="log-prize-status" style="max-height:120px"></div>
+  </div>
+
+  <!-- STEP 2: Winner registers their public key -->
+  <div class="card"><span class="card-label">Step 2 — Winner: register your RSA public key</span>
+    <div class="explain">
+      As the winner, generate a fresh RSA key pair in the browser.
+      Your <span class="hi">public key (n, e)</span> goes on-chain so the organizer can encrypt the prize for you.
+      Your <span class="hi">private key stays in this session</span> — never shared.
+    </div>
+    <button class="btn btn-black" onclick="winnerGenKeys()" style="margin-bottom:12px">Generate My RSA Key Pair</button>
+    <div class="log" id="log-winner-gen"></div>
+    <hr/>
+    <div class="explain" style="margin-top:12px;margin-bottom:12px">
+      Or paste existing winner key components manually:
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Winner RSA N (hex)</label>
+        <input id="w-rsaN" type="text" placeholder="auto-filled after Generate"/>
+      </div>
+      <div class="field">
+        <label>Winner RSA E (hex)</label>
+        <input id="w-rsaE" type="text" placeholder="010001"/>
+      </div>
+    </div>
+    <button class="btn btn-green" onclick="registerWinnerKey()">Register Public Key On-Chain</button>
+    <div class="log" id="log-winner-reg"></div>
+  </div>
+
+  <!-- STEP 3: Organizer delivers re-encrypted prize -->
+  <div class="card"><span class="card-label">Step 3 — Organizer: deliver the prize</span>
+    <div class="explain">
+      After the winner registers their key, decrypt the original prize ciphertext (from the contract),
+      then re-encrypt it with the winner's public key and deliver it on-chain.
+    </div>
+
+    <div style="font-family:var(--mono);font-size:.72rem;margin-bottom:14px;color:var(--gray)">
+      Encrypted prize from contract (auto-loaded):
+    </div>
+    <textarea id="org-enc-prize" rows="2" placeholder="Load contract to auto-fill..."></textarea>
+
+    <div class="btns" style="margin-top:12px;margin-bottom:4px">
+      <button class="btn btn-outline" onclick="orgDecryptPrize()">1. Decrypt with My Private Key</button>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label>Decrypted prize plaintext (verify before re-encrypting)</label>
+      <input id="org-plain" type="text" placeholder="will appear after decryption"/>
+    </div>
+
+    <div class="btns" style="margin-bottom:4px">
+      <button class="btn btn-outline" onclick="orgReEncryptForWinner()">2. Re-encrypt for Winner</button>
+    </div>
+    <div class="field" style="margin-top:12px">
+      <label>Prize for winner (hex — auto-filled)</label>
+      <textarea id="org-prize-for-winner" rows="2" placeholder="0x... (auto-filled)"></textarea>
+    </div>
+
+    <button class="btn btn-green" onclick="deliverPrize()">3. Deliver Prize On-Chain</button>
+    <div class="log" id="log-org-deliver"></div>
+  </div>
+
+  <!-- STEP 4: Winner decrypts their prize -->
+  <div class="card"><span class="card-label">Step 4 — Winner: decrypt your prize</span>
+    <div class="explain">
+      Read <code>prizeForWinner</code> from the contract and decrypt it with your private key
+      (generated in Step 2 of this session).
+    </div>
+    <div class="btns" style="margin-bottom:12px">
+      <button class="btn btn-outline" onclick="loadPrizeForWinner()">Load prizeForWinner from contract</button>
+    </div>
+    <div class="field">
+      <label>Prize ciphertext (from contract)</label>
+      <textarea id="w-prize-cipher" rows="2" placeholder="0x..."></textarea>
+    </div>
+    <button class="btn btn-green" onclick="winnerDecryptPrize()">🔓 Decrypt My Prize</button>
+    <div id="prize-reveal-box" class="prize-box">
+      <div class="prize-label">🏆 Your prize:</div>
+      <div class="prize-value" id="prize-plaintext"></div>
+    </div>
+    <div class="log" id="log-winner-decrypt"></div>
+  </div>
+
+</div>
+
 <!-- ═══ PANE: RSA HELPER ═══════════════════════════════════════════ -->
 <div id="p-rsa" class="pane">
 
-  <div class="card"><span class="card-label">Generate RSA key pair (browser demo)</span>
+  <div class="card"><span class="card-label">Generate RSA key pair (organizer)</span>
     <div class="explain">
-      In production, run <code>node rsa-organizer.mjs generate-keys</code> in your terminal
-      so the private key never leaves your machine. This tab simulates the same
-      operations using the browser WebCrypto API for convenience.
+      In production, run <code>node prize-rsa.mjs generate-keys</code> in your terminal
+      so the private key never leaves your machine. This tab uses the browser WebCrypto API.
     </div>
     <button class="btn btn-black" onclick="rsaGenKeys()">Generate 2048-bit Key Pair</button>
     <div class="log" id="log-rsa-gen"></div>
   </div>
 
-  <div class="card"><span class="card-label">Encrypt personal data</span>
+  <div class="card"><span class="card-label">Encrypt data</span>
     <div class="field">
-      <label>Plaintext (e.g. DNI)</label>
-      <input id="rsa-plain" type="text" placeholder="12345678A - Your Name"/>
+      <label>Plaintext (prize, DNI, etc.)</label>
+      <input id="rsa-plain" type="text" placeholder="SUPER-SECRET-PRIZE-2025"/>
     </div>
-    <button class="btn btn-black" onclick="rsaEncrypt()">Encrypt</button>
+    <button class="btn btn-black" onclick="rsaEncrypt()">Encrypt with Organizer Public Key</button>
     <div class="log" id="log-rsa-enc"></div>
   </div>
 
@@ -518,7 +528,7 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
       <label>Ciphertext (hex)</label>
       <textarea id="rsa-cipher" placeholder="0x..."></textarea>
     </div>
-    <button class="btn btn-red" onclick="rsaDecrypt()">Decrypt with Private Key</button>
+    <button class="btn btn-red" onclick="rsaDecrypt()">Decrypt with Organizer Private Key</button>
     <div class="log" id="log-rsa-dec"></div>
   </div>
 
@@ -527,54 +537,57 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 <!-- ═══ PANE: HOW IT WORKS ══════════════════════════════════════════ -->
 <div id="p-info" class="pane">
 
-  <div class="card"><span class="card-label">Hash function design</span>
+  <div class="card"><span class="card-label">Prize encryption scheme</span>
     <div class="explain">
-      <span class="hi">Single-layer keccak256 with two parameters</span><br><br>
-      <code>bidHash = keccak256(abi.encodePacked(amount, password))</code><br><br>
-      The two inputs serve distinct purposes:<br>
-      &nbsp;&nbsp;<span class="hi">amount</span> &mdash; the actual bid value (hidden during bidding)<br>
-      &nbsp;&nbsp;<span class="hi">password</span> &mdash; a secret salt that prevents brute-force<br><br>
+      <span class="hi">Why RSA for the prize?</span><br><br>
+      Smart contracts are fully public — every byte on-chain is readable by anyone.
+      RSA-OAEP ensures the prize ciphertext reveals nothing without the private key.<br><br>
+      <span class="hi">Double encryption flow:</span><br>
+      &nbsp;&nbsp;1. Organizer encrypts prize with their RSA public key → ciphertext on-chain<br>
+      &nbsp;&nbsp;2. Winner registers their RSA public key on-chain<br>
+      &nbsp;&nbsp;3. Organizer decrypts prize + re-encrypts with winner's key → delivers on-chain<br>
+      &nbsp;&nbsp;4. Winner decrypts with their private key → reads the prize<br><br>
       <span class="hi">Security properties:</span><br>
-      &nbsp;&nbsp;Pre-image resistance: given only bidHash, nobody can recover amount or password<br>
-      &nbsp;&nbsp;Hiding: bid value is invisible on-chain during the bidding phase<br>
-      &nbsp;&nbsp;Binding: after committing the hash, the bidder cannot change amount or password<br>
-      &nbsp;&nbsp;Front-running resistance: miners see only the hash, not the value<br><br>
-      <span class="hi">Known limitation:</span><br>
-      If the amount range is small and known (e.g. 1-100 ETH), an attacker could
-      try all amounts. The password prevents this: brute-force requires iterating
-      all (amount, password) pairs, which is infeasible with a strong password.
+      &nbsp;&nbsp;Prize never in plaintext on-chain<br>
+      &nbsp;&nbsp;Organizer private key never touches blockchain<br>
+      &nbsp;&nbsp;Winner private key never shared<br>
+      &nbsp;&nbsp;Both public keys (n, e) on-chain for full auditability
     </div>
   </div>
 
-  <div class="card"><span class="card-label">Full protocol flow</span>
+  <div class="card"><span class="card-label">Bid hash design</span>
     <div class="explain">
-      <span class="hi">Phase BIDDING</span><br>
-      Bidder computes bidHash = keccak256(amount, password) off-chain.<br>
-      Calls bid(bidHash) with the required deposit. Nothing is visible.<br><br>
-      <span class="hi">Phase REVEAL</span><br>
-      Bidder calls reveal(amount, password). Contract checks:<br>
-      &nbsp;&nbsp;keccak256(amount, password) == stored bidHash<br>
-      Match: bid accepted. No match: deposit forfeited.<br><br>
-      <span class="hi">Phase CLAIM</span><br>
-      Winner calls claimPrize(amount, password). Same hash check as reveal,
-      acts as a second authentication factor. If winner doesn't claim,
-      skipClaimant() advances to the next highest bidder.<br><br>
-      <span class="hi">Phase ENDED</span><br>
-      All bidders who revealed correctly call refund() to recover deposit.
-      Organizer calls withdrawForfeited() for forfeited deposits.
+      <span class="hi">Single-layer keccak256:</span><br><br>
+      <code>bidHash = keccak256(abi.encodePacked(amount, password))</code><br><br>
+      Pre-image resistance · Hiding · Binding · Front-running resistance<br><br>
+      <span class="hi">Known limitation:</span> small amount ranges can be brute-forced.
+      A strong password prevents this by adding entropy.
     </div>
   </div>
 
-  <div class="card"><span class="card-label">Node.js CLI quick-start</span>
+  <div class="card"><span class="card-label">Protocol flow</span>
+    <div class="explain">
+      <span class="hi">BIDDING</span> — commit hash + deposit. Bid hidden.<br>
+      <span class="hi">REVEAL</span> &nbsp;— submit (amount, password). Contract verifies hash. Mismatch forfeits deposit.<br>
+      <span class="hi">CLAIM</span> &nbsp;&nbsp;— top bidder claims. Second hash check = authentication.<br>
+      <span class="hi">ENDED</span> &nbsp;&nbsp;— refunds for all who revealed. Prize delivery begins.
+    </div>
+  </div>
+
+  <div class="card"><span class="card-label">Node.js CLI (production use)</span>
     <div style="font-family:var(--mono);font-size:.75rem;line-height:2.2;background:#fff;padding:14px;border:1.5px solid var(--lightgray);">
-      <span style="color:var(--gray)"># Generate RSA key pair (run once)</span><br>
-      node rsa-organizer.mjs generate-keys<br><br>
-      <span style="color:var(--gray)"># Encrypt your personal data</span><br>
-      node rsa-organizer.mjs encrypt "12345678A"<br><br>
-      <span style="color:var(--gray)"># Get public key components for the constructor</span><br>
-      node rsa-organizer.mjs pubkey-components<br><br>
-      <span style="color:var(--gray)"># Decrypt the on-chain ciphertext</span><br>
-      node rsa-organizer.mjs decrypt "0xabc123..."
+      <span style="color:var(--gray)"># Organizer pre-deploy:</span><br>
+      node prize-rsa.mjs generate-keys<br>
+      node prize-rsa.mjs encrypt "MY_PRIZE"<br>
+      node prize-rsa.mjs pubkey-components<br><br>
+      <span style="color:var(--gray)"># Winner post-auction:</span><br>
+      node prize-rsa.mjs generate-winner-keys<br>
+      node prize-rsa.mjs pubkey-components --winner<br><br>
+      <span style="color:var(--gray)"># Organizer delivers:</span><br>
+      node prize-rsa.mjs decrypt "0xabc..."<br>
+      node prize-rsa.mjs encrypt-for-winner "MY_PRIZE" &lt;n&gt; &lt;e&gt;<br><br>
+      <span style="color:var(--gray)"># Winner collects:</span><br>
+      node prize-rsa.mjs decrypt-prize "0xdef..."
     </div>
   </div>
 
@@ -582,10 +595,9 @@ hr { border: none; border-top: 1px solid var(--lightgray); margin: 16px 0; }
 
 </div><!-- /wrap -->
 
-<!-- ── ETHERS v6 ─────────────────────────────────────────────────── -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <script>
-// ── Minimal ABI ──────────────────────────────────────────────────────────────
+// ── ABI (HashAuctionWithPrize) ────────────────────────────────────────────────
 const ABI = [
   "function bid(bytes32 bidHash) payable",
   "function reveal(uint256 amount, string password)",
@@ -598,25 +610,60 @@ const ABI = [
   "function getRankedBidders() view returns (address[])",
   "function bidders(address) view returns (bytes32 bidHash, uint256 revealedValue, uint256 deposit, bool revealed, bool refunded)",
   "function depositAmount() view returns (uint256)",
-  "function prizeKey() view returns (string)",
-  "function prizeClaimed() view returns (bool)",
-  "function claimIndex() view returns (uint256)",
+  "function minimumBid() view returns (uint256)",
+  "function biddingEnd() view returns (uint256)",
+  "function revealEnd() view returns (uint256)",
+  "function claimEnd() view returns (uint256)",
   "function currentPhase() view returns (string)",
+  "function claimIndex() view returns (uint256)",
+  "function prizeClaimed() view returns (bool)",
+  "function prizeDelivered() view returns (bool)",
+  "function encryptedPrize() view returns (bytes)",
+  "function prizeForWinner() view returns (bytes)",
+  "function winnerRsaPublicKeyN() view returns (string)",
+  "function winnerRsaPublicKeyE() view returns (string)",
+  "function organizerRsaPublicKeyN() view returns (string)",
+  "function organizerRsaPublicKeyE() view returns (string)",
+  "function registerWinnerPublicKey(string rsaN, string rsaE)",
+  "function deliverPrize(bytes prizeForWinner)",
+  "function getPrizeStatus() view returns (bool prizeClaimed, bool winnerKeyRegistered, bool prizeDelivered, address winner)",
 ];
 
-// ── State ────────────────────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────────────────
 let provider, signer, contract, userAddr;
-let rsaKeyPair = null; // WebCrypto key pair for in-browser RSA demo
+let organizerKeyPair = null; // WebCrypto key pair (organizer)
+let winnerKeyPair    = null; // WebCrypto key pair (winner)
 
-// ── Logging ──────────────────────────────────────────────────────────────────
+// ── Utils ─────────────────────────────────────────────────────────────────────
 function log(id, msg, cls = 'info') {
   const el = document.getElementById(id);
+  if (!el) return;
   el.innerHTML += `<span class="${cls}">${msg}\n</span>`;
   el.scrollTop = el.scrollHeight;
 }
-function logClear(id) { document.getElementById(id).innerHTML = ''; }
+function logClear(id) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = '';
+}
+function bytesToHex(buf) {
+  return '0x' + Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+function hexToBytes(hex) {
+  hex = hex.replace(/^0x/,'');
+  return new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b,16)));
+}
+function b64urlToHex(b64url) {
+  const b64 = b64url.replace(/-/g,'+').replace(/_/g,'/');
+  return Array.from(atob(b64)).map(c => c.charCodeAt(0).toString(16).padStart(2,'0')).join('');
+}
+function hexToB64url(hex) {
+  const bytes = hexToBytes(hex);
+  let bin = '';
+  bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+}
 
-// ── Tab navigation ───────────────────────────────────────────────────────────
+// ── Tab navigation ────────────────────────────────────────────────────────────
 function showPane(id, btn) {
   document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -624,93 +671,334 @@ function showPane(id, btn) {
   btn.classList.add('active');
 }
 
-// ── Phase bar ────────────────────────────────────────────────────────────────
+// ── Phase timeline + countdown ────────────────────────────────────────────────
+// Timestamps loaded from contract (Unix seconds)
+let phaseTimes = { biddingEnd: 0, revealEnd: 0, claimEnd: 0 };
+let countdownInterval = null;
+
 function updatePhaseBar(phase) {
   const order = ['BIDDING','REVEAL','CLAIM','ENDED'];
   const idx   = order.indexOf(phase);
   order.forEach((p, i) => {
-    const el = document.getElementById('ps-' + p);
-    el.classList.remove('active', 'done');
-    if (i < idx)  el.classList.add('done');
-    if (i === idx) el.classList.add('active');
+    const el   = document.getElementById('ps-' + p);
+    const prog = document.getElementById('prog-' + p);
+    const cd   = document.getElementById('cd-' + p);
+    el.classList.remove('active','done');
+    prog.classList.remove('active','done');
+    cd.classList.remove('active','done','future');
+    if (i < idx)  { el.classList.add('done');   prog.classList.add('done');   cd.classList.add('done'); }
+    if (i === idx){ el.classList.add('active');  prog.classList.add('active'); cd.classList.add('active'); }
+    if (i > idx)  { cd.classList.add('future'); }
   });
 }
 
-// ── Wallet ───────────────────────────────────────────────────────────────────
+async function loadPhaseTimes() {
+  if (!contract) return;
+  try {
+    const [bEnd, rEnd, cEnd] = await Promise.all([
+      contract.biddingEnd(),
+      contract.revealEnd(),
+      contract.claimEnd(),
+    ]);
+    phaseTimes.biddingEnd = Number(bEnd);
+    phaseTimes.revealEnd  = Number(rEnd);
+    phaseTimes.claimEnd   = Number(cEnd);
+    startCountdown();
+  } catch(_) {}
+}
+
+function formatDuration(secs) {
+  if (secs <= 0) return '00:00:00';
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  return [h, m, s].map(v => String(v).padStart(2,'0')).join(':');
+}
+
+function startCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  tickCountdown();
+  countdownInterval = setInterval(tickCountdown, 1000);
+}
+
+function tickCountdown() {
+  const now  = Math.floor(Date.now() / 1000);
+  const { biddingEnd, revealEnd, claimEnd } = phaseTimes;
+  if (!biddingEnd) return;
+
+  // Determine live phase from timestamps
+  let livePhase;
+  if (now < biddingEnd)      livePhase = 'BIDDING';
+  else if (now < revealEnd)  livePhase = 'REVEAL';
+  else if (now < claimEnd)   livePhase = 'CLAIM';
+  else                       livePhase = 'ENDED';
+
+  updatePhaseBar(livePhase);
+
+  // Each segment: show time remaining or elapsed
+  const phases = [
+    { key: 'BIDDING', start: biddingEnd - (revealEnd - biddingEnd), end: biddingEnd,  duration: biddingEnd - (biddingEnd - (revealEnd - biddingEnd)) },
+    { key: 'REVEAL',  start: biddingEnd, end: revealEnd,  duration: revealEnd - biddingEnd },
+    { key: 'CLAIM',   start: revealEnd,  end: claimEnd,   duration: claimEnd  - revealEnd  },
+    { key: 'ENDED',   start: claimEnd,   end: null,       duration: null },
+  ];
+
+  // Recompute actual phase start times
+  const phaseData = [
+    { key: 'BIDDING', start: 0,          end: biddingEnd, duration: biddingEnd },
+    { key: 'REVEAL',  start: biddingEnd, end: revealEnd,  duration: revealEnd - biddingEnd },
+    { key: 'CLAIM',   start: revealEnd,  end: claimEnd,   duration: claimEnd  - revealEnd  },
+    { key: 'ENDED',   start: claimEnd,   end: null,       duration: null },
+  ];
+
+  phaseData.forEach(({ key, start, end, duration }) => {
+    const timeEl  = document.getElementById('cd-time-' + key);
+    const labelEl = document.getElementById('cd-label-' + key);
+    const barEl   = document.getElementById('cd-bar-' + key);
+
+    if (key === 'ENDED') {
+      if (now >= claimEnd) {
+        labelEl.textContent = 'auction ended';
+        timeEl.textContent  = '—';
+        barEl.style.width   = '100%';
+      } else {
+        const remaining = claimEnd - now;
+        labelEl.textContent = 'starts in';
+        timeEl.textContent  = formatDuration(remaining);
+        const pct = duration > 0 ? Math.max(0, Math.min(100, ((now - start) / duration) * 100)) : 0;
+        barEl.style.width = pct + '%';
+      }
+      return;
+    }
+
+    if (now < start) {
+      // Future phase
+      const remaining = start - now;
+      labelEl.textContent = 'starts in';
+      timeEl.textContent  = formatDuration(remaining);
+      barEl.style.width   = '0%';
+    } else if (now < end) {
+      // Active phase — show time remaining
+      const remaining = end - now;
+      const pct = duration > 0 ? Math.max(0, Math.min(100, ((now - start) / duration) * 100)) : 0;
+      labelEl.textContent = 'ends in';
+      timeEl.textContent  = formatDuration(remaining);
+      barEl.style.width   = pct + '%';
+    } else {
+      // Done
+      labelEl.textContent = 'ended';
+      timeEl.textContent  = '✓ done';
+      barEl.style.width   = '100%';
+    }
+  });
+}
+
+// ── Prize step indicator ──────────────────────────────────────────────────────
+function updatePrizeSteps(status) {
+  // status: { prizeClaimed, winnerKeyRegistered, prizeDelivered }
+  const steps = [
+    document.getElementById('step-1'),
+    document.getElementById('step-2'),
+    document.getElementById('step-3'),
+    document.getElementById('step-4'),
+  ];
+  steps.forEach(s => { s.classList.remove('active','done'); });
+
+  if (!status.prizeClaimed) {
+    steps[0].classList.add('active');
+  } else if (!status.winnerKeyRegistered) {
+    steps[0].classList.add('done');
+    steps[1].classList.add('active');
+  } else if (!status.prizeDelivered) {
+    steps[0].classList.add('done');
+    steps[1].classList.add('done');
+    steps[2].classList.add('active');
+  } else {
+    steps[0].classList.add('done');
+    steps[1].classList.add('done');
+    steps[2].classList.add('done');
+    steps[3].classList.add('active');
+  }
+}
+
+// ── Wallet ────────────────────────────────────────────────────────────────────
 async function connectWallet() {
-  if (!window.ethereum) { alert('MetaMask not found'); return; }
-  provider = new ethers.BrowserProvider(window.ethereum);
-  await provider.send('eth_requestAccounts', []);
-  signer   = await provider.getSigner();
-  userAddr = await signer.getAddress();
-  document.getElementById('walletAddr').textContent =
-    userAddr.slice(0,6) + '...' + userAddr.slice(-4);
-  document.getElementById('connectBtn').textContent = 'Connected';
-  const addr = document.getElementById('contractAddr').value.trim();
-  if (addr) await loadContract();
+  if (!window.ethereum) {
+    alert('MetaMask not found.\n\nIf you opened this file with file://, try serving it with:\n  npx serve .\nor drag it into a local HTTP server.');
+    return;
+  }
+  try {
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    signer   = await provider.getSigner();
+    userAddr = await signer.getAddress();
+    document.getElementById('walletAddr').textContent = userAddr.slice(0,6) + '...' + userAddr.slice(-4);
+    document.getElementById('connectBtn').textContent = 'Connected ✓';
+    const addr = document.getElementById('contractAddr').value.trim();
+    if (addr) await loadContract();
+  } catch(e) {
+    alert('Wallet connection failed: ' + e.message);
+  }
 }
 
 async function ensureConnected() {
-  if (!signer) await connectWallet();
+  if (!signer) {
+    await connectWallet();
+  }
+  // Double-check signer is actually ready after connectWallet
+  if (!signer) throw new Error('Wallet not connected. Click "Connect Wallet" first.');
 }
 
-// ── Deploy instructions ──────────────────────────────────────────────────────
+// ── WebCrypto helpers ─────────────────────────────────────────────────────────
+const RSA_PARAMS = { name:'RSA-OAEP', modulusLength:2048, publicExponent:new Uint8Array([1,0,1]), hash:'SHA-256' };
+
+async function generateRsaKeyPair() {
+  return await crypto.subtle.generateKey(RSA_PARAMS, true, ['encrypt','decrypt']);
+}
+
+async function rsaEncryptWith(publicKey, plaintext) {
+  const buf = await crypto.subtle.encrypt({ name:'RSA-OAEP' }, publicKey, new TextEncoder().encode(plaintext));
+  return bytesToHex(buf);
+}
+
+async function rsaDecryptWith(privateKey, hexCipher) {
+  const buf = await crypto.subtle.decrypt({ name:'RSA-OAEP' }, privateKey, hexToBytes(hexCipher));
+  return new TextDecoder().decode(buf);
+}
+
+async function getPublicKeyComponents(publicKey) {
+  const jwk = await crypto.subtle.exportKey('jwk', publicKey);
+  return { n: b64urlToHex(jwk.n), e: b64urlToHex(jwk.e) };
+}
+
+// Reconstruct RSA public key from hex n, e
+async function importPublicKeyFromHex(hexN, hexE) {
+  const jwk = {
+    kty: 'RSA',
+    alg: 'RSA-OAEP-256',
+    n: hexToB64url(hexN),
+    e: hexToB64url(hexE),
+    ext: true,
+    key_ops: ['encrypt'],
+  };
+  return await crypto.subtle.importKey('jwk', jwk, { name:'RSA-OAEP', hash:'SHA-256' }, true, ['encrypt']);
+}
+
+// ── Create: generate keys + encrypt prize ─────────────────────────────────────
+async function createGenAndEncrypt() {
+  logClear('log-prize-create');
+  const plain = document.getElementById('c-prize-plain').value.trim();
+  if (!plain) { log('log-prize-create','Enter prize plaintext first.','err'); return; }
+
+  try {
+    log('log-prize-create','Generating 2048-bit RSA key pair...');
+    organizerKeyPair = await generateRsaKeyPair();
+    const { n, e } = await getPublicKeyComponents(organizerKeyPair.publicKey);
+    document.getElementById('c-rsaN').value = n;
+    document.getElementById('c-rsaE').value = e;
+    log('log-prize-create','Key pair generated. Private key lives in this session only.','ok');
+
+    log('log-prize-create','Encrypting prize...');
+    const hex = await rsaEncryptWith(organizerKeyPair.publicKey, plain);
+    document.getElementById('c-enc').value = hex;
+    log('log-prize-create','Prize encrypted. Ciphertext auto-filled above.','ok');
+    log('log-prize-create','Now fill durations + deposit and click Deploy via Remix.','hi');
+  } catch(e) { log('log-prize-create','ERROR: ' + e.message,'err'); }
+}
+
+// ── Deploy instructions ───────────────────────────────────────────────────────
 async function deployInstructions() {
   logClear('log-create');
-  const prize   = document.getElementById('c-prize').value.trim() || 'PRIZE-001';
-  const dep     = document.getElementById('c-dep').value    || '0.01';
-  const bidDur  = document.getElementById('c-bid').value    || '300';
-  const revDur  = document.getElementById('c-rev').value    || '180';
-  const clmDur  = document.getElementById('c-claim').value  || '120';
-  const enc     = document.getElementById('c-enc').value.trim()  || '0x00';
-  const rsaN    = document.getElementById('c-rsaN').value.trim() || '';
-  const rsaE    = document.getElementById('c-rsaE').value.trim() || '010001';
-
+  const dep    = document.getElementById('c-dep').value    || '0.01';
+  const minBid = document.getElementById('c-minbid').value || '0';
+  const bidDur = document.getElementById('c-bid').value    || '300';
+  const revDur = document.getElementById('c-rev').value    || '180';
+  const clmDur = document.getElementById('c-claim').value  || '120';
+  const enc    = document.getElementById('c-enc').value.trim()  || '0x00';
+  const rsaN   = document.getElementById('c-rsaN').value.trim() || '(missing)';
+  const rsaE   = document.getElementById('c-rsaE').value.trim() || '010001';
   const depWei = ethers.parseEther(dep).toString();
 
-  log('log-create', '== REMIX DEPLOY INSTRUCTIONS ==', 'hi');
-  log('log-create', '1. Open remix.ethereum.org');
-  log('log-create', '2. Paste HashAuction.sol into a new file');
-  log('log-create', '3. Compile with Solidity 0.8.20');
-  log('log-create', '4. Environment: Injected Provider (MetaMask on Sepolia)');
-  log('log-create', '5. Constructor args:', 'hi');
-  log('log-create', `   _prizeKey:               "${prize}"`);
-  log('log-create', `   _depositAmount:          ${depWei}`);
-  log('log-create', `   _biddingDuration:        ${bidDur}`);
-  log('log-create', `   _revealDuration:         ${revDur}`);
-  log('log-create', `   _claimDuration:          ${clmDur}`);
-  log('log-create', `   _encryptedOrganizerData: ${enc}`);
-  log('log-create', `   _rsaPublicKeyN:          "${rsaN}"`);
-  log('log-create', `   _rsaPublicKeyE:          "${rsaE}"`);
-  log('log-create', '6. Click Deploy -> confirm in MetaMask', 'ok');
-  log('log-create', '7. Copy the contract address and paste it above -> click Load Existing', 'ok');
+  log('log-create','== REMIX DEPLOY INSTRUCTIONS ==','hi');
+  log('log-create','1. Open remix.ethereum.org');
+  log('log-create','2. Paste HashAuctionWithPrize.sol into a new file');
+  log('log-create','3. Compile with Solidity 0.8.20');
+  log('log-create','4. Environment: Injected Provider (MetaMask)');
+  log('log-create','5. Constructor args:','hi');
+  log('log-create',`   _depositAmount:          ${depWei}`);
+  log('log-create',`   _minimumBid:             ${minBid}`);
+  log('log-create',`   _biddingDuration:        ${bidDur}`);
+  log('log-create',`   _revealDuration:         ${revDur}`);
+  log('log-create',`   _claimDuration:          ${clmDur}`);
+  log('log-create',`   _encryptedPrize:         ${enc}`);
+  log('log-create',`   _organizerRsaPublicKeyN: "${rsaN}"`);
+  log('log-create',`   _organizerRsaPublicKeyE: "${rsaE}"`);
+  log('log-create','6. Click Deploy -> confirm in MetaMask','ok');
+  log('log-create','7. Copy contract address -> paste above -> Load Existing','ok');
 }
 
-// ── Load contract ────────────────────────────────────────────────────────────
+// ── Load contract ─────────────────────────────────────────────────────────────
 async function loadContract() {
   logClear('log-create');
   try {
+    // Make sure wallet is connected first
     await ensureConnected();
+
     const addr = document.getElementById('contractAddr').value.trim();
     if (!addr) { log('log-create', 'No contract address.', 'err'); return; }
-    contract   = new ethers.Contract(addr, ABI, signer);
-    const phase = await contract.currentPhase();
-    const prize = await contract.prizeKey();
-    const dep   = await contract.depositAmount();
+    if (!ethers.isAddress(addr)) { log('log-create', 'Invalid address format.', 'err'); return; }
+
+    // Always attach signer so read AND write calls work
+    contract = new ethers.Contract(addr, ABI, signer);
+
+    // Test with a simple view call
+    log('log-create', 'Connecting to contract...');
+    const phase  = await contract.currentPhase();
+    const dep    = await contract.depositAmount();
+    const minBid = await contract.minimumBid();
+
     updatePhaseBar(phase);
     log('log-create', `Contract loaded: ${addr}`, 'ok');
-    log('log-create', `Phase:   ${phase}`);
-    log('log-create', `Prize:   ${prize}`);
-    log('log-create', `Deposit: ${ethers.formatEther(dep)} ETH`);
-  } catch(e) { log('log-create', 'ERROR: ' + e.message, 'err'); }
+    log('log-create', `Phase:        ${phase}`);
+    log('log-create', `Deposit:      ${ethers.formatEther(dep)} ETH`);
+    log('log-create', `Minimum bid:  ${minBid.toString()} wei`);
+
+    // Show minimum bid banners in Bid and Reveal tabs
+    const minBidStr = minBid.toString();
+    if (BigInt(minBidStr) > 0n) {
+      document.getElementById('min-bid-value').textContent        = minBidStr;
+      document.getElementById('min-bid-value-reveal').textContent = minBidStr;
+      document.getElementById('min-bid-banner').style.display        = 'block';
+      document.getElementById('min-bid-banner-reveal').style.display = 'block';
+    } else {
+      document.getElementById('min-bid-banner').style.display        = 'none';
+      document.getElementById('min-bid-banner-reveal').style.display = 'none';
+    }
+
+    // Load phase timestamps for the countdown
+    await loadPhaseTimes();
+
+    // Auto-load encrypted prize into organizer deliver tab
+    try {
+      const encPrize = await contract.encryptedPrize();
+      document.getElementById('org-enc-prize').value = encPrize;
+    } catch(_) {}
+  } catch(e) {
+    log('log-create', 'ERROR: ' + e.message, 'err');
+    // Common causes hint
+    if (e.message.includes('UNSUPPORTED_OPERATION') || e.message.includes('runner')) {
+      log('log-create', 'Hint: Make sure MetaMask is connected (click Connect Wallet first).', 'hi');
+    }
+    if (e.message.includes('network') || e.message.includes('chain')) {
+      log('log-create', 'Hint: Check MetaMask is on the correct network (Sepolia or Remix VM).', 'hi');
+    }
+  }
 }
 
-// ── Hash computation (matches Solidity: keccak256(amount, password)) ─────────
+// ── Hash ──────────────────────────────────────────────────────────────────────
 function computeHashLocal(amount, password) {
-  // Must match: keccak256(abi.encodePacked(uint256, string))
-  return ethers.solidityPackedKeccak256(['uint256', 'string'], [BigInt(amount), password]);
+  return ethers.solidityPackedKeccak256(['uint256','string'], [BigInt(amount), password]);
 }
-
 function computeHash() {
   const amount   = document.getElementById('b-amount').value;
   const password = document.getElementById('b-pass').value;
@@ -720,28 +1008,34 @@ function computeHash() {
   document.getElementById('hash-preview').classList.add('show');
 }
 
-// ── Bid ──────────────────────────────────────────────────────────────────────
+// ── Bid ───────────────────────────────────────────────────────────────────────
 async function submitBid() {
   logClear('log-bid');
   try {
     await ensureConnected();
-    if (!contract) { log('log-bid', 'Load a contract first.', 'err'); return; }
+    if (!contract) { log('log-bid','Load a contract first.','err'); return; }
     const amount   = document.getElementById('b-amount').value;
     const password = document.getElementById('b-pass').value;
-    if (!amount || !password) { log('log-bid', 'Fill amount and password.', 'err'); return; }
+    if (!amount || !password) { log('log-bid','Fill amount and password.','err'); return; }
+
+    // Client-side minimum bid check
+    try {
+      const minBid = await contract.minimumBid();
+      if (BigInt(amount) < minBid) {
+        log('log-bid', `⚠ Warning: your bid (${amount} wei) is below the minimum (${minBid.toString()} wei). The deposit will be forfeited on reveal.`, 'err');
+        return;
+      }
+    } catch(_) {}
 
     const hash    = computeHashLocal(amount, password);
     const deposit = await contract.depositAmount();
-
-    log('log-bid', `bidHash = keccak256(${amount}, "${password}")`);
-    log('log-bid', `       = ${hash}`, 'hi');
-    log('log-bid', `Sending deposit: ${ethers.formatEther(deposit)} ETH`);
-
+    log('log-bid',`bidHash = ${hash}`,'hi');
+    log('log-bid',`Deposit: ${ethers.formatEther(deposit)} ETH`);
     const tx = await contract.bid(hash, { value: deposit });
-    log('log-bid', `tx submitted: ${tx.hash}`, 'info');
+    log('log-bid',`tx: ${tx.hash}`,'info');
     await tx.wait();
-    log('log-bid', 'Bid committed on-chain.', 'ok');
-  } catch(e) { log('log-bid', 'ERROR: ' + e.message, 'err'); }
+    log('log-bid','Bid committed on-chain.','ok');
+  } catch(e) { log('log-bid','ERROR: ' + e.message,'err'); }
 }
 
 async function loadBidders() {
@@ -752,72 +1046,97 @@ async function loadBidders() {
   for (const addr of list) {
     const b  = await contract.bidders(addr);
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${addr.slice(0,6)}...${addr.slice(-4)}</td>
+    tr.innerHTML = `<td>${addr.slice(0,6)}...${addr.slice(-4)}</td>
       <td>${ethers.formatEther(b.deposit)} ETH</td>
-      <td><span class="badge ${b.revealed ? 'badge-ok' : 'badge-warn'}">
-        ${b.revealed ? 'Revealed' : 'Pending'}</span></td>`;
+      <td><span class="badge ${b.revealed ? 'badge-ok':'badge-warn'}">${b.revealed ? 'Revealed':'Pending'}</span></td>`;
     tbody.appendChild(tr);
   }
 }
 
-// ── Reveal ───────────────────────────────────────────────────────────────────
+// ── Reveal ────────────────────────────────────────────────────────────────────
 async function revealBid() {
   logClear('log-reveal');
   try {
     await ensureConnected();
-    if (!contract) { log('log-reveal', 'Load contract first.', 'err'); return; }
+    if (!contract) { log('log-reveal','Load contract first.','err'); return; }
     const amount   = document.getElementById('r-amount').value;
     const password = document.getElementById('r-pass').value;
+    if (!amount || !password) { log('log-reveal','Fill amount and password.','err'); return; }
 
-    log('log-reveal', `Recomputing keccak256(${amount}, "${password}")...`);
+    // Client-side minimum bid check
+    try {
+      const minBid = await contract.minimumBid();
+      if (BigInt(amount) < minBid) {
+        log('log-reveal', `⚠ Your bid (${amount} wei) is below the minimum (${minBid.toString()} wei). Revealing will forfeit your deposit — are you sure?`, 'err');
+        // Allow proceeding but flag it clearly
+      }
+    } catch(_) {}
+
+    log('log-reveal',`Recomputing keccak256(${amount}, "${password}")...`);
     const tx = await contract.reveal(BigInt(amount), password);
-    log('log-reveal', `tx: ${tx.hash}`, 'info');
+    log('log-reveal',`tx: ${tx.hash}`,'info');
     await tx.wait();
-    log('log-reveal', 'Bid revealed successfully.', 'ok');
+    log('log-reveal','Bid revealed successfully.','ok');
     updatePhaseBar(await contract.currentPhase());
-  } catch(e) { log('log-reveal', 'ERROR: ' + e.message, 'err'); }
+  } catch(e) { log('log-reveal','ERROR: ' + e.message,'err'); }
 }
 
-// ── Ranking ──────────────────────────────────────────────────────────────────
+// ── Ranking ───────────────────────────────────────────────────────────────────
 async function loadRanking() {
-  if (!contract) return;
-  const ranked = await contract.getRankedBidders();
-  const idx    = Number(await contract.claimIndex());
-  const tbody  = document.getElementById('tbl-ranking');
-  tbody.innerHTML = '';
-  for (let i = 0; i < ranked.length; i++) {
-    const b      = await contract.bidders(ranked[i]);
-    const status = i < idx ? 'Skipped' : i === idx ? 'Current' : 'Next';
-    const cls    = i < idx ? 'badge-err' : i === idx ? 'badge-ok' : 'badge-warn';
-    const tr     = document.createElement('tr');
-    tr.innerHTML = `
-      <td>#${i+1}</td>
-      <td>${ranked[i].slice(0,6)}...${ranked[i].slice(-4)}</td>
-      <td>${b.revealedValue.toString()}</td>
-      <td><span class="badge ${cls}">${status}</span></td>`;
-    tbody.appendChild(tr);
+  if (!contract) { alert('Load a contract first.'); return; }
+  const tbody = document.getElementById('tbl-ranking');
+  tbody.innerHTML = '<tr><td colspan="4" style="color:var(--gray)">Loading...</td></tr>';
+  try {
+    // Advance phase on-chain so ranking gets written to storage if needed
+    const phase = await contract.currentPhase();
+    if (phase === 'CLAIM' || phase === 'ENDED') {
+      try {
+        const tx = await contract.tickPhase();
+        await tx.wait();
+      } catch(_) { /* already in correct phase or view-only — ignore */ }
+    }
+
+    const ranked = await contract.getRankedBidders();
+    const idx    = Number(await contract.claimIndex());
+
+    tbody.innerHTML = '';
+    if (ranked.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="color:var(--gray)">No revealed bids yet. Make sure reveal phase is over.</td></tr>';
+      updatePhaseBar(await contract.currentPhase());
+      return;
+    }
+
+    for (let i = 0; i < ranked.length; i++) {
+      const b      = await contract.bidders(ranked[i]);
+      const status = i < idx ? 'Skipped' : i === idx ? 'Current' : 'Next';
+      const cls    = i < idx ? 'badge-err' : i === idx ? 'badge-ok' : 'badge-warn';
+      const tr     = document.createElement('tr');
+      tr.innerHTML = `<td>#${i+1}</td><td>${ranked[i].slice(0,6)}...${ranked[i].slice(-4)}</td>
+        <td>${b.revealedValue.toString()} wei</td>
+        <td><span class="badge ${cls}">${status}</span></td>`;
+      tbody.appendChild(tr);
+    }
+    updatePhaseBar(await contract.currentPhase());
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--red)">Error: ${e.message}</td></tr>`;
   }
-  updatePhaseBar(await contract.currentPhase());
 }
 
-// ── Claim / Skip / Refund ────────────────────────────────────────────────────
+// ── Claim ─────────────────────────────────────────────────────────────────────
 async function claimPrize() {
   logClear('log-claim');
   try {
     await ensureConnected();
-    if (!contract) { log('log-claim', 'Load contract first.', 'err'); return; }
+    if (!contract) { log('log-claim','Load contract first.','err'); return; }
     const amount   = document.getElementById('cl-amount').value;
     const password = document.getElementById('cl-pass').value;
-    log('log-claim', 'Claiming prize...');
+    log('log-claim','Claiming prize...');
     const tx = await contract.claimPrize(BigInt(amount), password);
-    log('log-claim', `tx: ${tx.hash}`, 'info');
+    log('log-claim',`tx: ${tx.hash}`,'info');
     await tx.wait();
-    const prize = await contract.prizeKey();
-    log('log-claim', 'Prize claimed!', 'ok');
-    log('log-claim', `Prize key: ${prize}`, 'hi');
+    log('log-claim','Prize claimed! Now go to the 🔐 Prize tab to receive your encrypted prize.','ok');
     updatePhaseBar(await contract.currentPhase());
-  } catch(e) { log('log-claim', 'ERROR: ' + e.message, 'err'); }
+  } catch(e) { log('log-claim','ERROR: ' + e.message,'err'); }
 }
 
 async function skipClaimant() {
@@ -825,11 +1144,11 @@ async function skipClaimant() {
   try {
     await ensureConnected();
     const tx = await contract.skipClaimant();
-    log('log-claim', `tx: ${tx.hash}`, 'info');
+    log('log-claim',`tx: ${tx.hash}`,'info');
     await tx.wait();
-    log('log-claim', 'Claimant skipped.', 'ok');
+    log('log-claim','Claimant skipped.','ok');
     await loadRanking();
-  } catch(e) { log('log-claim', 'ERROR: ' + e.message, 'err'); }
+  } catch(e) { log('log-claim','ERROR: ' + e.message,'err'); }
 }
 
 async function refund() {
@@ -837,73 +1156,194 @@ async function refund() {
   try {
     await ensureConnected();
     const tx = await contract.refund();
-    log('log-claim', `tx: ${tx.hash}`, 'info');
+    log('log-claim',`tx: ${tx.hash}`,'info');
     await tx.wait();
-    log('log-claim', 'Deposit refunded.', 'ok');
-  } catch(e) { log('log-claim', 'ERROR: ' + e.message, 'err'); }
+    log('log-claim','Deposit refunded.','ok');
+  } catch(e) { log('log-claim','ERROR: ' + e.message,'err'); }
 }
 
-// ── RSA Helper (WebCrypto) ───────────────────────────────────────────────────
-function b64urlToHex(b64url) {
-  const b64  = b64url.replace(/-/g, '+').replace(/_/g, '/');
-  const bin  = atob(b64);
-  return Array.from(bin).map(c => c.charCodeAt(0).toString(16).padStart(2,'0')).join('');
-}
-function hexToBytes(hex) {
-  hex = hex.replace(/^0x/,'');
-  return new Uint8Array(hex.match(/.{1,2}/g).map(b => parseInt(b, 16)));
+// ── Prize tab: status ─────────────────────────────────────────────────────────
+async function refreshPrizeStatus() {
+  logClear('log-prize-status');
+  try {
+    if (!contract) { log('log-prize-status','Load a contract first.','err'); return; }
+    const s = await contract.getPrizeStatus();
+    const status = {
+      prizeClaimed:        s[0],
+      winnerKeyRegistered: s[1],
+      prizeDelivered:      s[2],
+      winner:              s[3],
+    };
+    log('log-prize-status',`Prize claimed:         ${status.prizeClaimed}`);
+    log('log-prize-status',`Winner key registered: ${status.winnerKeyRegistered}`);
+    log('log-prize-status',`Prize delivered:       ${status.prizeDelivered}`);
+    log('log-prize-status',`Winner address:        ${status.winner}`);
+    updatePrizeSteps(status);
+
+    if (status.prizeDelivered) {
+      log('log-prize-status','Prize has been delivered! Winner can now decrypt in Step 4.','ok');
+    } else if (status.winnerKeyRegistered) {
+      log('log-prize-status','Waiting for organizer to deliver re-encrypted prize.','hi');
+    } else if (status.prizeClaimed) {
+      log('log-prize-status','Waiting for winner to register their RSA public key.','hi');
+    } else {
+      log('log-prize-status','Auction not ended yet.','info');
+    }
+  } catch(e) { log('log-prize-status','ERROR: ' + e.message,'err'); }
 }
 
+// ── Prize tab: Step 2 — winner generates and registers key ───────────────────
+async function winnerGenKeys() {
+  logClear('log-winner-gen');
+  try {
+    log('log-winner-gen','Generating winner RSA 2048-bit key pair...');
+    winnerKeyPair = await generateRsaKeyPair();
+    const { n, e } = await getPublicKeyComponents(winnerKeyPair.publicKey);
+    document.getElementById('w-rsaN').value = n;
+    document.getElementById('w-rsaE').value = e;
+    log('log-winner-gen','Key pair generated. Private key is in this session only.','ok');
+    log('log-winner-gen',`n: ${n}`,'hi');
+    log('log-winner-gen',`e: ${e}`);
+    log('log-winner-gen','Now click "Register Public Key On-Chain".','hi');
+  } catch(e) { log('log-winner-gen','ERROR: ' + e.message,'err'); }
+}
+
+async function registerWinnerKey() {
+  logClear('log-winner-reg');
+  try {
+    await ensureConnected();
+    if (!contract) { log('log-winner-reg','Load contract first.','err'); return; }
+    const n = document.getElementById('w-rsaN').value.trim();
+    const e = document.getElementById('w-rsaE').value.trim();
+    if (!n || !e) { log('log-winner-reg','Generate or paste winner RSA components first.','err'); return; }
+    log('log-winner-reg','Registering winner public key on-chain...');
+    const tx = await contract.registerWinnerPublicKey(n, e);
+    log('log-winner-reg',`tx: ${tx.hash}`,'info');
+    await tx.wait();
+    log('log-winner-reg','Winner public key registered on-chain!','ok');
+    log('log-winner-reg','Organizer can now deliver the prize.','hi');
+  } catch(e) { log('log-winner-reg','ERROR: ' + e.message,'err'); }
+}
+
+// ── Prize tab: Step 3 — organizer decrypts + re-encrypts ─────────────────────
+async function orgDecryptPrize() {
+  logClear('log-org-deliver');
+  try {
+    if (!organizerKeyPair) {
+      log('log-org-deliver','No organizer key pair in memory. Did you generate keys in the Create tab this session?','err');
+      return;
+    }
+    const hex = document.getElementById('org-enc-prize').value.trim();
+    if (!hex || hex === '0x') { log('log-org-deliver','No encrypted prize loaded.','err'); return; }
+    log('log-org-deliver','Decrypting with organizer private key...');
+    const plain = await rsaDecryptWith(organizerKeyPair.privateKey, hex);
+    document.getElementById('org-plain').value = plain;
+    log('log-org-deliver',`Decrypted: ${plain}`,'ok');
+  } catch(e) { log('log-org-deliver','ERROR: ' + e.message,'err'); }
+}
+
+async function orgReEncryptForWinner() {
+  logClear('log-org-deliver');
+  try {
+    if (!contract) { log('log-org-deliver','Load contract first.','err'); return; }
+    const plain = document.getElementById('org-plain').value.trim();
+    if (!plain) { log('log-org-deliver','Decrypt the prize first (Step 1 above).','err'); return; }
+
+    log('log-org-deliver','Fetching winner RSA public key from contract...');
+    const wN = await contract.winnerRsaPublicKeyN();
+    const wE = await contract.winnerRsaPublicKeyE();
+    if (!wN || !wE) { log('log-org-deliver','Winner has not registered their key yet.','err'); return; }
+    log('log-org-deliver',`Winner n: ${wN.slice(0,32)}...`);
+
+    log('log-org-deliver','Re-encrypting for winner...');
+    const winnerPub = await importPublicKeyFromHex(wN, wE);
+    const hex = await rsaEncryptWith(winnerPub, plain);
+    document.getElementById('org-prize-for-winner').value = hex;
+    log('log-org-deliver','Re-encrypted. Click "Deliver Prize On-Chain".','ok');
+  } catch(e) { log('log-org-deliver','ERROR: ' + e.message,'err'); }
+}
+
+async function deliverPrize() {
+  logClear('log-org-deliver');
+  try {
+    await ensureConnected();
+    if (!contract) { log('log-org-deliver','Load contract first.','err'); return; }
+    const hex = document.getElementById('org-prize-for-winner').value.trim();
+    if (!hex) { log('log-org-deliver','Re-encrypt prize first (Step 2 above).','err'); return; }
+    log('log-org-deliver','Delivering prize on-chain...');
+    const tx = await contract.deliverPrize(hex);
+    log('log-org-deliver',`tx: ${tx.hash}`,'info');
+    await tx.wait();
+    log('log-org-deliver','Prize delivered on-chain!','ok');
+    log('log-org-deliver','Winner can now decrypt in Step 4.','hi');
+  } catch(e) { log('log-org-deliver','ERROR: ' + e.message,'err'); }
+}
+
+// ── Prize tab: Step 4 — winner decrypts ──────────────────────────────────────
+async function loadPrizeForWinner() {
+  try {
+    if (!contract) { alert('Load contract first.'); return; }
+    const data = await contract.prizeForWinner();
+    document.getElementById('w-prize-cipher').value = data;
+  } catch(e) { alert('ERROR: ' + e.message); }
+}
+
+async function winnerDecryptPrize() {
+  logClear('log-winner-decrypt');
+  try {
+    if (!winnerKeyPair) {
+      log('log-winner-decrypt','No winner key pair in memory. Did you generate keys in Step 2 this session?','err');
+      return;
+    }
+    const hex = document.getElementById('w-prize-cipher').value.trim();
+    if (!hex) { log('log-winner-decrypt','Load the prize ciphertext first.','err'); return; }
+    log('log-winner-decrypt','Decrypting with winner private key...');
+    const plain = await rsaDecryptWith(winnerKeyPair.privateKey, hex);
+    document.getElementById('prize-plaintext').textContent = plain;
+    document.getElementById('prize-reveal-box').classList.add('show');
+    log('log-winner-decrypt','Prize decrypted!','ok');
+  } catch(e) { log('log-winner-decrypt','ERROR: ' + e.message,'err'); }
+}
+
+// ── RSA Helper tab ────────────────────────────────────────────────────────────
 async function rsaGenKeys() {
   logClear('log-rsa-gen');
   try {
-    log('log-rsa-gen', 'Generating 2048-bit RSA-OAEP key pair...');
-    rsaKeyPair = await crypto.subtle.generateKey(
-      { name:'RSA-OAEP', modulusLength:2048,
-        publicExponent: new Uint8Array([1,0,1]), hash:'SHA-256' },
-      true, ['encrypt','decrypt']
-    );
-    const jwk  = await crypto.subtle.exportKey('jwk', rsaKeyPair.publicKey);
-    const nHex = b64urlToHex(jwk.n);
-    const eHex = b64urlToHex(jwk.e);
-    log('log-rsa-gen', 'Keys generated (in-memory this session).', 'ok');
-    log('log-rsa-gen', `n: ${nHex}`, 'hi');
-    log('log-rsa-gen', `e: ${eHex}`);
-    document.getElementById('c-rsaN').value = nHex;
-    document.getElementById('c-rsaE').value = eHex;
-    log('log-rsa-gen', 'Auto-filled into Create Auction form.', 'ok');
-  } catch(e) { log('log-rsa-gen', 'ERROR: ' + e.message, 'err'); }
+    log('log-rsa-gen','Generating 2048-bit RSA-OAEP key pair...');
+    organizerKeyPair = await generateRsaKeyPair();
+    const { n, e } = await getPublicKeyComponents(organizerKeyPair.publicKey);
+    log('log-rsa-gen','Keys generated (in-memory this session).','ok');
+    log('log-rsa-gen',`n: ${n}`,'hi');
+    log('log-rsa-gen',`e: ${e}`);
+    document.getElementById('c-rsaN').value = n;
+    document.getElementById('c-rsaE').value = e;
+    log('log-rsa-gen','Auto-filled Create Auction form.','ok');
+  } catch(e) { log('log-rsa-gen','ERROR: ' + e.message,'err'); }
 }
 
 async function rsaEncrypt() {
   logClear('log-rsa-enc');
   try {
-    if (!rsaKeyPair) { log('log-rsa-enc', 'Generate keys first.', 'err'); return; }
-    const plain  = document.getElementById('rsa-plain').value;
-    const cipher = await crypto.subtle.encrypt(
-      { name:'RSA-OAEP' }, rsaKeyPair.publicKey, new TextEncoder().encode(plain)
-    );
-    const hex = '0x' + Array.from(new Uint8Array(cipher))
-      .map(b => b.toString(16).padStart(2,'0')).join('');
-    log('log-rsa-enc', 'Ciphertext (hex):', 'hi');
+    if (!organizerKeyPair) { log('log-rsa-enc','Generate keys first.','err'); return; }
+    const plain = document.getElementById('rsa-plain').value;
+    const hex   = await rsaEncryptWith(organizerKeyPair.publicKey, plain);
+    log('log-rsa-enc','Ciphertext (hex):','hi');
     log('log-rsa-enc', hex);
-    document.getElementById('c-enc').value    = hex;
+    document.getElementById('c-enc').value      = hex;
     document.getElementById('rsa-cipher').value = hex;
-    log('log-rsa-enc', 'Auto-filled into Create Auction form.', 'ok');
-  } catch(e) { log('log-rsa-enc', 'ERROR: ' + e.message, 'err'); }
+    log('log-rsa-enc','Auto-filled into Create Auction form.','ok');
+  } catch(e) { log('log-rsa-enc','ERROR: ' + e.message,'err'); }
 }
 
 async function rsaDecrypt() {
   logClear('log-rsa-dec');
   try {
-    if (!rsaKeyPair) { log('log-rsa-dec', 'Generate keys first (same session).', 'err'); return; }
-    const hex    = document.getElementById('rsa-cipher').value.trim();
-    const plain  = await crypto.subtle.decrypt(
-      { name:'RSA-OAEP' }, rsaKeyPair.privateKey, hexToBytes(hex)
-    );
-    log('log-rsa-dec', 'Decrypted:', 'hi');
-    log('log-rsa-dec', new TextDecoder().decode(plain), 'ok');
-  } catch(e) { log('log-rsa-dec', 'ERROR: ' + e.message, 'err'); }
+    if (!organizerKeyPair) { log('log-rsa-dec','Generate keys first (same session).','err'); return; }
+    const hex   = document.getElementById('rsa-cipher').value.trim();
+    const plain = await rsaDecryptWith(organizerKeyPair.privateKey, hex);
+    log('log-rsa-dec','Decrypted:','hi');
+    log('log-rsa-dec', plain,'ok');
+  } catch(e) { log('log-rsa-dec','ERROR: ' + e.message,'err'); }
 }
 </script>
 </body>
